@@ -79,6 +79,18 @@ public class AdVpnService extends VpnService implements Handler.Callback {
         @Override
         public void run(int value) {
             handler.sendMessage(handler.obtainMessage(VPN_MSG_STATUS_UPDATE, value, 0));
+            if (value==VPN_STATUS_RUNNING) {
+                Intent intent = new Intent();
+                intent.setAction("net.dinglish.android.tasker.DNS66_STATUS");
+                intent.putExtra("status","running");
+                sendBroadcast(intent);
+            }
+            else if (value==VPN_STATUS_STOPPED) {
+                Intent intent = new Intent();
+                intent.setAction("net.dinglish.android.tasker.DNS66_STATUS");
+                intent.putExtra("status","stopped");
+                sendBroadcast(intent);
+            }
         }
     });
     private final BroadcastReceiver connectivityChangedReceiver = new BroadcastReceiver() {
