@@ -1,0 +1,45 @@
+package org.jak_linux.dns66;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.net.VpnService;
+import android.os.Build;
+import org.jak_linux.dns66.vpn.AdVpnService;
+import org.jak_linux.dns66.vpn.Command;
+
+public class IntentBroadcastReceiver extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent receivedintent) {
+        int command = -1 ;
+        switch (receivedintent.getAction()){
+            case "app.intent.action.RESUME" :
+                command=Command.RESUME.ordinal();
+                break;
+            case "app.intent.action.START" :
+                Intent startintent = VpnService.prepare(context);
+                if (startintent != null) {
+                    context.startActivity(startintent);
+                }
+                command=Command.START.ordinal();
+                break;
+            case "app.intent.action.STOP" :
+                command=Command.STOP.ordinal();
+                break;
+            case "app.intent.action.PAUSE" :
+                command=Command.PAUSE.ordinal();
+                break;
+        }
+       if (command!=-1) {
+            Intent intent = new Intent(context, AdVpnService.class);
+            intent.putExtra("COMMAND", command);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+               context.startForegroundService(intent);
+            }
+            else {
+               context.startService(intent);
+            }
+        }
+    }
+}

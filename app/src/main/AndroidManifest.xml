@@ -65,7 +65,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
+        <receiver android:name=".IntentBroadcastReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="app.intent.action.RESUME"/>
+                <action android:name="app.intent.action.START"/>
+                <action android:name="app.intent.action.STOP"/>
+                <action android:name="app.intent.action.PAUSE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
